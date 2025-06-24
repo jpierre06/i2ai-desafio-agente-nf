@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.zip
+.env
+test/
+.git/
+.gitignore
+agente_csv/
+.vscode/
+.idea/

@@ -1,0 +1,13 @@
+services:
+  csv_agent:
+    container_name: csv_agent_conteiner
+    build: .
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    stdin_open: true    # Equivalente ao -i
+    tty: true           # Equivalente ao -t
+    restart: unless-stopped
