@@ -17,13 +17,13 @@ Este repositório utiliza as seguintes tecnologias:
 ### 🌐 Acesso na Web
 
 A versão online do sistema está disponível em:
-🔗 https://agente-ia-nf-main-kyr3p7syqfwz3ky23c4bpd.streamlit.app/
+🔗 https://main-i2ai-desafio-agente-nf-oregyzonhs4acveaa43kxb.streamlit.app/
 
 ### 📥 Para uso local
 
 1. **Clone o repositório**:
     ```bash
-    git clone https://github.com/seu-usuario/Desbravando-IA.git
+    git clone https://github.com/jpierre06/i2ai-desafio-agente-nf.git
     ```
 2. **Construa a imagem Docker**:
     ```bash
@@ -46,6 +46,18 @@ A solução foi organizada de forma a facilitar a navegação e o entendimento, 
 - **requirements.txt**: Lista todas as dependências necessárias para executar os projetos localmente.
 - **Dockerfile**: Arquivo para criar um ambiente Docker isolado, garantindo que a solução funcione de forma consistente em diferentes sistemas.
 - **app.py**: Arquivo principal para a interface interativa criada com Streamlit, permitindo a visualização e interação com os resultados dos projetos.
+
+## ✍️ Objetivo do projeto?
+O projeto tem como objetivo concluir um desafio do curso de Agentes Autônomos de IA promovidos pela I2A2
+
+## Participantes do projeto:
+Cesar Ribeiro
+Izabella Cerutti
+Camila Brasil
+Paulo Vitor
+Jean Santana
+Ana Julya
+
 
 ## ✍️ Como contribuir?
 
