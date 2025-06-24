@@ -50,12 +50,17 @@ A solução foi organizada de forma a facilitar a navegação e o entendimento, 
 ## ✍️ Objetivo do projeto?
 O projeto tem como objetivo concluir um desafio do curso de Agentes Autônomos de IA promovidos pela I2A2
 
-## Participantes do projeto:
+### Participantes do projeto:
 Cesar Ribeiro
+
 Izabella Cerutti
+
 Camila Brasil
+
 Paulo Vitor
+
 Jean Santana
+
 Ana Julya
 
 
