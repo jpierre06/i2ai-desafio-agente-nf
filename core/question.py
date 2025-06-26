@@ -33,54 +33,34 @@ def run_csv_question_chain(question: str, locals: dict, api_key: str):
 
     {df_context}
 
-    Given a user's question about tax information related to the dataframes, write the Python code to answer it.
+    Given a user's question about tax information related to dataframes, write the Python code to answer it.
 
-    You will only have access to the internal libraries of Python and Pandas.
-
-    Make sure to refer only to the variables mentioned above.
+    You will only have access to the built-in Python and Pandas libraries.
+    Make sure to query only the variables mentioned above.
 
     Make some assumptions about the data provided:
-        All information related to the "EMITENTE" is related to "Sales" and "Sellers";
-        All information related to the "DESTINATÁRIO" is related to "Purchases" and "Buyers";
+        All information related to "EMITENTE" is related to "Sales" and "Sellers";
+        All information related to "DESTINATÁRIO" is related to "Purchases" and "Buyers";
 
-    All answers involving numeric values ​​must be in table format.
-    By default, return numerical values sorted in descending order.
+    All responses involving numeric values must be in table format.
+    By default, numeric values are returned in descending order.
 
-    There were questions that needed to be asked in more than one stage of data analysis.
+    There were questions that needed to be asked at more than one stage of the data analysis.
+
     For example:
 
-    * Identify the 5 states with the highest sales and, in each state, the 5 items with the highest sales.
+    * Identify the 5 states with the highest sales and, in each state, list the 5 items with the highest sales.
 
-        1 - First, you will need to identify the 5 states with the highest sales;
-        2 - Using the list of states, identify the 5 items with the highest sales for each state;
-        3 - Return a complete list with the 5 items (identified in stage 2) with the highest sales in each state (identified in stage 1)
+    1 - First, you will need to identify the 5 states with the highest sales and generate an intermediate list of these states;
+    2 - Using the intermediate list of states, identify the 5 items with the highest sales for each state on the list;
+    3 - Return a complete list with the 5 states (identified in step 1) and in each state the 5 items (identified in step 2) with the highest sales.
     """
 
     prompt = ChatPromptTemplate.from_messages([("system", system), ("human", "{question}")])
 
     parser = JsonOutputKeyToolsParser(key_name=tool.name, first_tool_only=True)
     
-    """      # Separar a cadeia para capturar o código ANTES de executar
-    chain_to_code = prompt | llm_with_tool | parser
-    generated_code = chain_to_code.invoke({"question": question})
-
-    try:
-        result = tool.invoke({"question": question})
-        return result, generated_code
-    except Exception as e:
-        return f"❌ Ocorreu um erro ao tentar responder sua pergunta. Detalhes técnicos: {str(e)}" """
-
-    """     
-    chain = prompt | llm_with_tool | parser | tool
-    result = chain.invoke({"question": question})
-
-    # Recupera o último código executado
-    code_executado = getattr(tool, "last_code_executed", "Código indisponível")
-
-    return result, code_executado """
-
-
-      # Etapas separadas: gerar código -> executar
+    # Etapas separadas: gerar código -> executar
     chain_to_code = prompt | llm_with_tool | parser
     python_code = chain_to_code.invoke({"question": question})
 
