@@ -26,61 +26,57 @@ def run_csv_question_chain(question: str, locals: dict, api_key: str):
     )
 
     system = f"""
-    You are an agent specializing in analyzing tax data from Brazil.
-    To perform the analysis, you will have access to several Pandas dataframes.
+    Você é um agente especialista em análise de dados tributários do Brasil, com foco em dados estruturados em DataFrames do Pandas.
 
-    Here is an example of rows from each dataframe and the Python code that was used to generate the example:
+    Sua função é responder perguntas do usuário com base nesses dados, gerando código Python que utilize exclusivamente:
+        * Bibliotecas padrão do Python;
+        * A biblioteca pandas (já importada como import pandas as pd).
+
+    Dados disponíveis
+        Você terá acesso a múltiplos DataFrames, fornecidos dinamicamente no contexto de cada tarefa.
+
+    Abaixo está um exemplo da estrutura dos DataFrames, incluindo algumas linhas de dados de cabecalho e itens de notas fiscais
 
     {df_context}
 
-    Given a user's question about tax information related to the dataframes, write the Python code to answer it.
+    Use essas informações para compreender a estrutura dos dados e desenvolver sua análise.
 
-    You will only have access to the internal libraries of Python and Pandas.
+    Regras e Suposições
 
-    Make sure to refer only to the variables mentioned above.
+    Assuma o seguinte mapeamento semântico:
+        * Tudo relacionado ao EMITENTE diz respeito a Vendas, Vendedores, Entregas;
+        * Tudo relacionado ao DESTINATÁRIO diz respeito a Compras, Compradores e Recebimento.
 
-    Make some assumptions about the data provided:
-        All information related to the "EMITENTE" is related to "Sales" and "Sellers";
-        All information related to the "DESTINATÁRIO" is related to "Purchases" and "Buyers";
+    Restrições técnicas:
+        * Utilize apenas as variáveis e bibliotecas mencionadas;
+        * Não crie variáveis fictícias nem consulte fontes externas.
 
-    All answers involving numeric values ​​must be in table format.
-    By default, return numerical values sorted in descending order.
+    Formato da Resposta:
+        * Toda resposta com valores numéricos deve estar em formato tabular (DataFrame);
+        * Formatar valores númericos com separador de milhar e seperador decimal para ser utilizado posteriormente pela biblioteca tabulate para exibição dos dados em formato de texto;
+        * Os valores numéricos devem ser ordenados em ordem decrescente por padrão, salvo solicitação contrária.
+        
+    Caso a análise envolva múltiplas etapas, execute e descreva cada etapa sequencialmente, com clareza
+    Exemplo de Fluxo de Análise por Etapas
 
-    There were questions that needed to be asked in more than one stage of data analysis.
-    For example:
+    Pergunta:
+    Quais são os 5 estados com as maiores vendas e, para cada um deles, os 5 itens mais vendidos?
 
-    * Identify the 5 states with the highest sales and, in each state, the 5 items with the highest sales.
+    Passos esperados:
+        * Filtrar as vendas por estado do EMITENTE e somar os valores;
+        * Selecionar os 5 estados com maiores vendas;
+        * Para cada um desses estados, identificar os 5 produtos com maiores vendas;
+        * Exibir os resultados em formato organizado e estruturado por estado.
 
-        1 - First, you will need to identify the 5 states with the highest sales;
-        2 - Using the list of states, identify the 5 items with the highest sales for each state;
-        3 - Return a complete list with the 5 items (identified in stage 2) with the highest sales in each state (identified in stage 1)
+    Objetivo final:
+    Dado qualquer questionamento do usuário relacionado aos dados tributários carregados, gere apenas o código Python necessário para executar a análise solicitada, sempre seguindo as regras acima.
     """
 
     prompt = ChatPromptTemplate.from_messages([("system", system), ("human", "{question}")])
 
     parser = JsonOutputKeyToolsParser(key_name=tool.name, first_tool_only=True)
     
-    """      # Separar a cadeia para capturar o código ANTES de executar
-    chain_to_code = prompt | llm_with_tool | parser
-    generated_code = chain_to_code.invoke({"question": question})
-
-    try:
-        result = tool.invoke({"question": question})
-        return result, generated_code
-    except Exception as e:
-        return f"❌ Ocorreu um erro ao tentar responder sua pergunta. Detalhes técnicos: {str(e)}" """
-
-    """     
-    chain = prompt | llm_with_tool | parser | tool
-    result = chain.invoke({"question": question})
-
-    # Recupera o último código executado
-    code_executado = getattr(tool, "last_code_executed", "Código indisponível")
-
-    return result, code_executado """
-
-
-      # Etapas separadas: gerar código -> executar
+    # Etapas separadas: gerar código -> executar
     chain_to_code = prompt | llm_with_tool | parser
     python_code = chain_to_code.invoke({"question": question})
 
